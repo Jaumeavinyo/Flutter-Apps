@@ -1,3 +1,4 @@
+import 'package:HELLO_FLATTER/widgets/CreditCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,14 +22,14 @@ class CreditCard {
 
 class User {
   //User es la pantalla entera y todo lo que es modificable
-  final num user_id;
+  final num userID;
   final String name;
   final num money;
   final num creditCardNumber;
   final num expirationDate;
   final CreditCard card;
   User(
-      {this.user_id,
+      {this.userID,
       this.name,
       this.money,
       this.creditCardNumber,
@@ -37,7 +38,7 @@ class User {
 }
 
 final userHome = User(
-  user_id: 1,
+  userID: 1,
   name: "juanito",
   money: 300,
   creditCardNumber: 1234,
@@ -64,9 +65,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Flutter Hello World"),
-      ),
-    );
+        appBar: AppBar(
+          title: Text("Flutter Hello World"),
+        ),
+        body: Column(children: [
+          CreditCard_W(
+              card: CreditCard(
+                  name: "userHome.name",
+                  creditCardNumber: 1234,
+                  expirationDate: 3107,
+                  money: 300)),
+        ]));
   }
 }
