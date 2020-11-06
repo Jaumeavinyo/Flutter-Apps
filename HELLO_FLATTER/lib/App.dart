@@ -67,42 +67,128 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blue.shade700,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 2,
-          ),
-          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-            Expanded(
-              flex: 2,
-              child: Container(color: Colors.blue.shade700),
-            ),
-            Expanded(
-              flex: 8,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
-                  ),
-                ),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.blue.shade700,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ]),
+        child: Stack(
+          children: [CreditCardWidgetComplete()],
         ),
+      ),
+    );
+  }
+}
+
+//______________________________________________________________________________
+
+class CreditCardWidgetComplete extends StatelessWidget {
+  //final User userHomeVar;
+  num money = 3000; //this should be taken from userHomeVar
+  //const CreditCardWidgetComplete({this.userHomeVar});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: 300,
+      child: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: TopSectorCreditCard(
+                heightVar: 100.0, widthVar: 250.0, moneyVar: money),
+          ),
+          Expanded(
+            flex: 2,
+            child: BotSectorCreditCard(heightVar: 100.0, widthVar: 250.0),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+//______________________________________________________________________________
+
+class TopSectorCreditCard extends StatelessWidget {
+  final double heightVar;
+  final double widthVar;
+  final num moneyVar;
+
+  TopSectorCreditCard({
+    @required this.heightVar,
+    @required this.widthVar,
+    @required this.moneyVar,
+  });
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+        height: heightVar,
+        width: widthVar,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20))),
+        child: Row(
+          children: [
+            Column(),
+            Column(
+              children: [
+                Spacer(flex: 3),
+                AddNumber(
+                    numVar: moneyVar,
+                    colorVar: Colors.blue,
+                    fontSizeVar: 25,
+                    boldVar: FontWeight.bold),
+                Spacer(flex: 1),
+              ],
+            ),
+            Column()
+          ],
+        ));
+  }
+}
+
+//______________________________________________________________________________
+
+class BotSectorCreditCard extends StatelessWidget {
+  final double heightVar;
+  final double widthVar;
+
+  BotSectorCreditCard({
+    @required this.heightVar,
+    @required this.widthVar,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      height: heightVar,
+      width: widthVar,
+      decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20))),
+    );
+  }
+}
+
+//______________________________________________________________________________
+
+class AddNumber extends StatelessWidget {
+  //DONE
+  AddNumber(
+      {@required this.numVar, this.colorVar, this.fontSizeVar, this.boldVar});
+
+  final num numVar;
+  Color colorVar = Colors.black;
+  num fontSizeVar = 15;
+  FontWeight boldVar = FontWeight.normal;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$numVar',
+      style: TextStyle(
+        color: colorVar,
+        fontSize: fontSizeVar,
+        fontWeight: boldVar,
       ),
     );
   }
