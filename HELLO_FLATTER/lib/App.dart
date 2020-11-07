@@ -16,7 +16,7 @@ class BankScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade700,
+      backgroundColor: Colors.blue[700],
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -32,7 +32,7 @@ class BankScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Container(
-                          color: Colors.blue.shade800,
+                          color: Colors.blue[800],
                           width: 170,
                         ),
                       ],
@@ -57,28 +57,55 @@ class BankScreen extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Title(),
+                            Title(text: "My Wallets"),
                             Spacer(flex: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 AddWallet(),
                                 Spacer(flex: 1),
-                                Wallet(),
+                                Wallet(
+                                  color: Colors.orangeAccent[700],
+                                  currency: "Bitcoin",
+                                  quantity: 0.23456,
+                                  percentage: 2.5,
+                                  isPositive: true,
+                                  isShadowLeft: true,
+                                  isShadowRight: false,
+                                ),
                                 Spacer(flex: 2),
-                                Wallet(),
+                                Wallet(
+                                  color: Colors.purple[900],
+                                  currency: "Ethereum",
+                                  quantity: 0.23456,
+                                  percentage: 0.5,
+                                  isPositive: true,
+                                  isShadowLeft: false,
+                                  isShadowRight: true,
+                                ),
                               ],
                             ),
                             Spacer(flex: 14),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                TransactionButton(),
-                                TransactionButton(),
+                                TransactionButton(
+                                  color: Colors.tealAccent[400],
+                                  action: 'Buy',
+                                  icon: Icons.shopping_cart,
+                                ),
+                                TransactionButton(
+                                  color: Colors.pinkAccent[200],
+                                  action: 'Sell',
+                                  icon: Icons.shopping_basket,
+                                ),
                               ],
                             ),
                             Spacer(flex: 12),
-                            Title(),
+                            Title(
+                              text: "Transaction",
+                              hasViewAll: false,
+                            ),
                             Spacer(flex: 5),
                             Expanded(
                               flex: 32,
@@ -99,7 +126,7 @@ class BankScreen extends StatelessWidget {
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
-                        color: Colors.blue.shade700,
+                        color: Colors.blue[700],
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(12),
                           topRight: Radius.circular(12),
@@ -118,15 +145,30 @@ class BankScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Spacer(),
-                      BarButton(),
+                      BarButton(
+                        icon: Icons.account_balance_wallet,
+                        text: "Wallet",
+                      ),
                       Spacer(flex: 3),
-                      BarButton(),
+                      BarButton(
+                        icon: Icons.data_usage,
+                        text: "Statistik",
+                      ),
                       Spacer(flex: 3),
-                      BarButton(),
+                      BarButton(
+                        icon: Icons.compare_arrows,
+                        text: "Transactions",
+                      ),
                       Spacer(flex: 3),
-                      BarButton(),
+                      BarButton(
+                        icon: Icons.mail,
+                        text: "Message",
+                      ),
                       Spacer(flex: 3),
-                      BarButton(),
+                      BarButton(
+                        icon: Icons.person,
+                        text: "Profile",
+                      ),
                       Spacer(),
                     ],
                   ),
@@ -143,9 +185,13 @@ class BankScreen extends StatelessWidget {
 //_____________________________________________________________________________
 
 class BarButton extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
   const BarButton({
-    Key key,
-  }) : super(key: key);
+    @required this.icon,
+    @required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -154,13 +200,13 @@ class BarButton extends StatelessWidget {
       children: [
         Spacer(flex: 200),
         Icon(
-          Icons.account_balance_wallet,
+          icon,
           size: 22,
           color: Colors.white,
         ),
         Spacer(),
         Text(
-          'Wallet',
+          text,
           style: TextStyle(
             color: Colors.white,
             fontSize: 11,
@@ -195,7 +241,7 @@ class Transaction extends StatelessWidget {
               Radius.circular(8),
             ),
             border: Border.all(
-              color: Colors.orange.shade50,
+              color: Colors.orange[50],
               width: 1,
             ),
           ),
@@ -222,7 +268,7 @@ class Transaction extends StatelessWidget {
               child: Text(
                 'Buy',
                 style: TextStyle(
-                  color: Colors.blueGrey.shade900,
+                  color: Colors.blueGrey[900],
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                 ),
@@ -233,7 +279,7 @@ class Transaction extends StatelessWidget {
               child: Text(
                 '24 Sept 2020',
                 style: TextStyle(
-                  color: Colors.blueGrey.shade200,
+                  color: Colors.blueGrey[200],
                   fontSize: 9,
                   fontWeight: FontWeight.w500,
                 ),
@@ -245,7 +291,7 @@ class Transaction extends StatelessWidget {
         Text(
           '+336,5',
           style: TextStyle(
-            color: Colors.blueGrey.shade900,
+            color: Colors.blueGrey[900],
             fontSize: 15,
             fontWeight: FontWeight.w700,
           ),
@@ -258,26 +304,33 @@ class Transaction extends StatelessWidget {
 //_____________________________________________________________________________
 
 class TransactionButton extends StatelessWidget {
+  final Color color;
+  final String action;
+  final IconData icon;
+
   const TransactionButton({
-    Key key,
-  }) : super(key: key);
+    @required this.color,
+    @required this.action,
+    @required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
+    Color shadowcolor = color.withAlpha(150);
+
     return Container(
       height: 30,
       width: 125,
       decoration: BoxDecoration(
-        color: Colors.pinkAccent.shade200,
+        color: color,
         borderRadius: BorderRadius.all(
           Radius.circular(17),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.pinkAccent.shade100,
-            spreadRadius: 1,
+            color: shadowcolor,
             offset: Offset(0, 3),
-            blurRadius: 9,
+            blurRadius: 10,
           ),
         ],
       ),
@@ -293,14 +346,14 @@ class TransactionButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Icon(
-              Icons.shopping_cart,
+              icon,
               size: 18,
-              color: Colors.pinkAccent.shade200,
+              color: color,
             ),
           ),
           Spacer(flex: 15),
           Text(
-            'Buy now',
+            '$action now',
             style: TextStyle(
               color: Colors.white,
               fontSize: 10,
@@ -317,24 +370,48 @@ class TransactionButton extends StatelessWidget {
 //_____________________________________________________________________________
 
 class Wallet extends StatelessWidget {
+  final Color color;
+  final String currency;
+  final double quantity;
+  final double percentage;
+  final bool isPositive;
+  final bool isShadowRight;
+  final bool isShadowLeft;
+
   const Wallet({
-    Key key,
-  }) : super(key: key);
+    @required this.color,
+    @required this.currency,
+    @required this.quantity,
+    @required this.percentage,
+    @required this.isPositive,
+    @required this.isShadowRight,
+    @required this.isShadowLeft,
+  });
 
   @override
   Widget build(BuildContext context) {
+    String sign = '-';
+    if (isPositive) {
+      sign = '+';
+    }
+    double dxshadow = 0;
+    if (isShadowRight) {
+      dxshadow = 1;
+    } else if (isShadowLeft) {
+      dxshadow = -1;
+    }
     return Container(
       height: 106,
       width: 86,
       decoration: BoxDecoration(
-        color: Colors.orangeAccent.shade700,
+        color: color,
         borderRadius: BorderRadius.all(
           Radius.circular(17),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.orange.shade800,
-            offset: Offset(1, 0),
+            color: color,
+            offset: Offset(dxshadow, 0),
             blurRadius: 2,
           ),
         ],
@@ -347,18 +424,18 @@ class Wallet extends StatelessWidget {
           children: [
             Spacer(flex: 40),
             Text(
-              'Ethereum',
+              currency,
               style: TextStyle(
-                color: Colors.grey.shade100,
+                color: Colors.grey[100],
                 fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
             ),
             Spacer(flex: 5),
             Text(
-              '0.23456 BTC',
+              '$quantity BTC',
               style: TextStyle(
-                color: Colors.grey.shade100,
+                color: Colors.grey[100],
                 fontSize: 9,
                 fontWeight: FontWeight.w600,
               ),
@@ -375,9 +452,9 @@ class Wallet extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '+ 2.5%',
+                  '$sign $percentage%',
                   style: TextStyle(
-                    color: Colors.orangeAccent.shade700,
+                    color: color,
                     fontSize: 9,
                     fontWeight: FontWeight.w600,
                   ),
@@ -417,13 +494,13 @@ class AddWallet extends StatelessWidget {
           Icon(
             Icons.add,
             size: 30,
-            color: Colors.tealAccent.shade700,
+            color: Colors.tealAccent[700],
           ),
           Spacer(flex: 20),
           Text(
             'Add Wallet',
             style: TextStyle(
-              color: Colors.tealAccent.shade700,
+              color: Colors.tealAccent[700],
               fontSize: 9,
               fontWeight: FontWeight.w500,
             ),
@@ -438,9 +515,13 @@ class AddWallet extends StatelessWidget {
 //_____________________________________________________________________________
 
 class Title extends StatelessWidget {
+  final String text;
+  final bool hasViewAll;
+
   const Title({
-    Key key,
-  }) : super(key: key);
+    @required this.text,
+    this.hasViewAll = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -448,33 +529,34 @@ class Title extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'My Wallets',
+          text,
           style: TextStyle(
-            color: Colors.blueGrey.shade900,
+            color: Colors.blueGrey[900],
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
         ),
-        Container(
-          height: 18,
-          width: 52,
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
+        if (hasViewAll)
+          Container(
+            height: 18,
+            width: 52,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
             ),
-          ),
-          child: Center(
-            child: Text(
-              'view all',
-              style: TextStyle(
-                color: Colors.blueGrey.shade900,
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
+            child: Center(
+              child: Text(
+                'view all',
+                style: TextStyle(
+                  color: Colors.blueGrey[900],
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
