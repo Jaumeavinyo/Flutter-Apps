@@ -187,12 +187,28 @@ class Transaction extends StatelessWidget {
       children: [
         Spacer(flex: 1),
         Container(
-          width: 26,
-          height: 26,
+          width: 38,
+          height: 38,
           decoration: BoxDecoration(
-            color: Colors.yellow,
+            color: Colors.white,
             borderRadius: BorderRadius.all(
               Radius.circular(8),
+            ),
+            border: Border.all(
+              color: Colors.orange.shade50,
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Container(
+              width: 26,
+              height: 26,
+              decoration: BoxDecoration(
+                color: Colors.yellow,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
             ),
           ),
         ),
