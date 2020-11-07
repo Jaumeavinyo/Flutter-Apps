@@ -2,9 +2,9 @@ import 'package:HELLO_FLATTER/App.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CreditCard_W extends StatelessWidget {
+class CreditCard extends StatelessWidget {
   final CreditCard card;
-  CreditCard_W({@required this.card});
+  CreditCard({@required this.card});
 
   @override
   Widget build(BuildContext context) {
