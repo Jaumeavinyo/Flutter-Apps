@@ -140,6 +140,8 @@ class BankScreen extends StatelessWidget {
   }
 }
 
+//_____________________________________________________________________________
+
 class BarButton extends StatelessWidget {
   const BarButton({
     Key key,
@@ -153,7 +155,7 @@ class BarButton extends StatelessWidget {
         Spacer(flex: 200),
         Icon(
           Icons.account_balance_wallet,
-          size: 24,
+          size: 22,
           color: Colors.white,
         ),
         Spacer(),
