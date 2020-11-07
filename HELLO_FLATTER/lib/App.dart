@@ -31,9 +31,19 @@ class BankScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          color: Colors.blue[800],
-                          width: 170,
+                        Expanded(
+                          flex: 5,
+                          child: Container(
+                            color: Colors.blue[700],
+                            // width: 170,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 5,
+                          child: Container(
+                            color: Colors.blue[800],
+                            // width: 170,
+                          ),
                         ),
                       ],
                     ),
