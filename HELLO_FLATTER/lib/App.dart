@@ -35,14 +35,12 @@ class BankScreen extends StatelessWidget {
                           flex: 5,
                           child: Container(
                             color: Colors.blue[700],
-                            // width: 170,
                           ),
                         ),
                         Expanded(
                           flex: 5,
                           child: Container(
                             color: Colors.blue[800],
-                            // width: 170,
                           ),
                         ),
                       ],
@@ -129,61 +127,7 @@ class BankScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.blue[700],
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12),
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(0, -4),
-                            blurRadius: 3,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Spacer(),
-                      BarButton(
-                        icon: Icons.account_balance_wallet,
-                        text: "Wallet",
-                      ),
-                      Spacer(flex: 3),
-                      BarButton(
-                        icon: Icons.data_usage,
-                        text: "Statistik",
-                      ),
-                      Spacer(flex: 3),
-                      BarButton(
-                        icon: Icons.compare_arrows,
-                        text: "Transactions",
-                      ),
-                      Spacer(flex: 3),
-                      BarButton(
-                        icon: Icons.mail,
-                        text: "Message",
-                      ),
-                      Spacer(flex: 3),
-                      BarButton(
-                        icon: Icons.person,
-                        text: "Profile",
-                      ),
-                      Spacer(),
-                    ],
-                  ),
-                ],
-              ),
+              WindowBar(),
             ],
           ),
         ),
@@ -194,38 +138,154 @@ class BankScreen extends StatelessWidget {
 
 //_____________________________________________________________________________
 
+class WindowBar extends StatelessWidget {
+  const WindowBar({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.blue[700],
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  offset: Offset(0, -4),
+                  blurRadius: 3,
+                ),
+              ],
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Spacer(),
+            BarButton(
+              icon: Icons.account_balance_wallet,
+              text: "Wallet",
+              selected: false,
+            ),
+            Spacer(flex: 3),
+            BarButton(
+              icon: Icons.data_usage,
+              text: "Statistik",
+              selected: false,
+            ),
+            Spacer(flex: 3),
+            BarButton(
+              icon: Icons.compare_arrows,
+              text: "Transactions",
+              selected: true,
+            ),
+            Spacer(flex: 3),
+            BarButton(
+              icon: Icons.mail,
+              text: "Message",
+              selected: false,
+            ),
+            Spacer(flex: 3),
+            BarButton(
+              icon: Icons.person,
+              text: "Profile",
+              selected: false,
+            ),
+            Spacer(),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+//_____________________________________________________________________________
+
 class BarButton extends StatelessWidget {
   final IconData icon;
   final String text;
+  final bool selected;
 
-  const BarButton({
+  BarButton({
     @required this.icon,
     @required this.text,
+    @required this.selected,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Spacer(flex: 200),
-        Icon(
-          icon,
-          size: 22,
-          color: Colors.white,
-        ),
-        Spacer(),
-        Text(
-          text,
-          style: TextStyle(
+    if (!selected)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Spacer(flex: 200),
+          Icon(
+            icon,
+            size: 22,
             color: Colors.white,
-            fontSize: 11,
-            fontWeight: FontWeight.w400,
           ),
-        ),
-        Spacer(),
-      ],
-    );
+          Spacer(),
+          Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Spacer(),
+        ],
+      );
+    else if (selected)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Spacer(flex: 200),
+          Container(
+            height: 46,
+            width: 46,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.all(
+                Radius.circular(9),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(0, -2),
+                  blurRadius: 3,
+                ),
+              ],
+            ),
+            child: Icon(
+              icon,
+              size: 32,
+              color: Colors.blue[700],
+            ),
+          ),
+          Spacer(flex: 3),
+          Container(
+            height: 3,
+            width: 40,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
+            ),
+          ),
+          Spacer(flex: 3),
+        ],
+      );
   }
 }
 
@@ -329,7 +389,7 @@ class TransactionButton extends StatelessWidget {
     Color shadowcolor = color.withAlpha(150);
 
     return Container(
-      height: 30,
+      height: 33,
       width: 125,
       decoration: BoxDecoration(
         color: color,
