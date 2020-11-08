@@ -124,12 +124,22 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
               WindowBar(),
-              CreditCardWidgetComplete(
-                  nameVar: userHomeVar.card.name,
-                  surnameVar: userHomeVar.card.surname,
-                  creditCardNumberVar: userHomeVar.card.creditCardNumber,
-                  totalMoneyVar: userHomeVar.card.money,
-                  expirationDateVar: userHomeVar.card.expirationDate)
+              Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Spacer(flex: 12),
+                    CreditCardWidgetComplete(
+                        nameVar: userHomeVar.card.name,
+                        surnameVar: userHomeVar.card.surname,
+                        creditCardNumberVar: userHomeVar.card.creditCardNumber,
+                        totalMoneyVar: userHomeVar.card.money,
+                        expirationDateVar: userHomeVar.card.expirationDate),
+                    Spacer(flex: 80),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

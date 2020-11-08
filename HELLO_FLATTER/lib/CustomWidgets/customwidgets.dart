@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class CreditCardWidgetComplete extends StatelessWidget {
   //final User userHomeVar;
-  num totalMoneyVar;
+  double totalMoneyVar;
   String nameVar;
   String surnameVar;
-  num creditCardNumberVar;
+  double creditCardNumberVar;
   String expirationDateVar;
   //const CreditCardWidgetComplete({this.userHomeVar});
   CreditCardWidgetComplete({
@@ -19,8 +19,26 @@ class CreditCardWidgetComplete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 200,
-        width: 300,
+        height: 150,
+        width: 216,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(18),
+            bottomLeft: Radius.circular(18),
+          ),
+          border: Border.all(
+            color: Colors.blue[700],
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(-5, 0),
+              blurRadius: 10,
+            ),
+          ],
+        ),
         child: Stack(
           children: [
             Column(
@@ -28,16 +46,16 @@ class CreditCardWidgetComplete extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: TopSectorCreditCard(
-                      heightVar: 100.0,
-                      widthVar: 270.0,
+                      heightVar: 75.0,
+                      widthVar: 216.0,
                       moneyVar: totalMoneyVar),
                 ),
                 Expanded(
                   flex: 2,
                   child: BotSectorCreditCard(
-                    color: Colors.blue[900],
-                    heightVar: 100.0,
-                    widthVar: 270.0,
+                    color: Colors.blue[700],
+                    heightVar: 75.0,
+                    widthVar: 216.0,
                     firstNumbersVar: 1312,
                     nameVar: nameVar,
                     surnameVar: surnameVar,
@@ -53,10 +71,10 @@ class CreditCardWidgetComplete extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                width: 40,
-                height: 30,
+                width: 30,
+                height: 22,
                 child: Image.asset(
-                  "../assets/chip.png",
+                  'assets/images/chip.png',
                   fit: BoxFit.contain,
                 ),
               ),
@@ -71,7 +89,7 @@ class CreditCardWidgetComplete extends StatelessWidget {
 class TopSectorCreditCard extends StatelessWidget {
   final double heightVar;
   final double widthVar;
-  final num moneyVar;
+  final double moneyVar;
 
   TopSectorCreditCard({
     @required this.heightVar,
@@ -87,7 +105,7 @@ class TopSectorCreditCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
+            topLeft: Radius.circular(16),
           ),
         ),
         child: Row(
@@ -106,15 +124,15 @@ class TopSectorCreditCard extends StatelessWidget {
                   flex: 15,
                   child: Container(
                     child: Image.asset(
-                      "../assets/visa.png",
+                      'assets/images/visa.png',
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
                 Expanded(
-                  flex: 30,
+                  flex: 40,
                   child: Container(
-                    width: 70,
+                    width: 40,
                   ),
                 )
               ],
@@ -125,7 +143,7 @@ class TopSectorCreditCard extends StatelessWidget {
                 Expanded(
                   child: Container(
                     width: 70,
-                    height: 90,
+                    height: 120,
                   ),
                   flex: 3,
                 ),
@@ -138,7 +156,7 @@ class TopSectorCreditCard extends StatelessWidget {
                       colorVar: Colors.blue,
                       fontSizeVar: 20,
                       boldVar: FontWeight.bold,
-                      codificatedNumberVar: ",0",
+                      codificatedNumberVar: "",
                     ),
                   ),
                 ),
@@ -156,7 +174,7 @@ class TopSectorCreditCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Container(
-                    width: 90,
+                    width: 80,
                     height: 90,
                   ),
                   flex: 10,
@@ -165,7 +183,7 @@ class TopSectorCreditCard extends StatelessWidget {
                   flex: 30,
                   child: Container(
                     child: Image.asset(
-                      "../assets/cardimage.png",
+                      'assets/image/cardimage.png',
                       fit: BoxFit.fill,
                       alignment: Alignment.bottomLeft,
                     ),
@@ -174,7 +192,7 @@ class TopSectorCreditCard extends StatelessWidget {
                 Expanded(
                   flex: 10,
                   child: Container(
-                    width: 90,
+                    width: 80,
                   ),
                 )
               ],
@@ -189,7 +207,7 @@ class TopSectorCreditCard extends StatelessWidget {
 class BotSectorCreditCard extends StatelessWidget {
   final double heightVar;
   final double widthVar;
-  num firstNumbersVar;
+  double firstNumbersVar;
   String nameVar;
   String surnameVar;
   String expiresVar;
@@ -213,7 +231,7 @@ class BotSectorCreditCard extends StatelessWidget {
         width: widthVar,
         decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20))),
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16))),
         child: Row(
           children: [
             Spacer(
@@ -232,7 +250,7 @@ class BotSectorCreditCard extends StatelessWidget {
                       //money in credit card
                       numVar: firstNumbersVar,
                       colorVar: Colors.white,
-                      fontSizeVar: 15,
+                      fontSizeVar: 12,
                       boldVar: FontWeight.bold,
                       codificatedNumberVar: "**** **** ****",
                     ),
@@ -257,7 +275,7 @@ class BotSectorCreditCard extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      ' $nameVar $surnameVar        $expiresVar     $cvvVar       ',
+                      ' $nameVar $surnameVar          $expiresVar       $cvvVar        ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 10,
@@ -287,13 +305,14 @@ class AddNumber extends StatelessWidget {
       this.boldVar,
       @required this.codificatedNumberVar});
 
-  final num numVar;
+  final double numVar;
   Color colorVar = Colors.black;
-  num fontSizeVar = 13;
+  double fontSizeVar = 13;
   FontWeight boldVar = FontWeight.normal;
   String codificatedNumberVar;
   @override
   Widget build(BuildContext context) {
+    numVar.round();
     return Text(
       '\$ $numVar $codificatedNumberVar',
       style: TextStyle(
@@ -486,15 +505,19 @@ class Transaction extends StatelessWidget {
           ),
           child: Center(
             child: Container(
-              width: 26,
-              height: 26,
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8),
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(
+                  color: Colors.yellow,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
                 ),
-              ),
-            ),
+                child: Image.asset(
+                  'assets/image/bitcoin.png',
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center,
+                )),
           ),
         ),
         Spacer(flex: 5),

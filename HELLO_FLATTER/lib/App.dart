@@ -16,8 +16,8 @@ void Function(){
 class CreditCard {
   final String name;
   final String surname;
-  final num money;
-  final num creditCardNumber;
+  final double money;
+  final double creditCardNumber;
   final String expirationDate;
   CreditCard(
       {this.surname,
@@ -32,8 +32,8 @@ class User {
 
   final String name;
   final String surname;
-  final num money;
-  final num creditCardNumber;
+  final double money;
+  final double creditCardNumber;
   final String expirationDate;
   final CreditCard card;
   User(
