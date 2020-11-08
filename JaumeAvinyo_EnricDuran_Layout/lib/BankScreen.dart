@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'App.dart';
-import 'CustomWidgets/customwidgets.dart';
+import 'CustomWidgets/custom_card_widget.dart';
+import 'CustomWidgets/custom_screen_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class BankScreen extends StatelessWidget {
   final User userHomeVar;
 
-  HomeScreen({@required this.userHomeVar});
+  BankScreen({@required this.userHomeVar});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                         Expanded(
                           flex: 5,
                           child: Container(
-                            color: Colors.blue[800],
+                            color: Color.fromARGB(255, 1, 99, 220),
                           ),
                         ),
                       ],

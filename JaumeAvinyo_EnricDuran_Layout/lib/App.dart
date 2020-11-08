@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'CustomWidgets/customwidgets.dart';
-import 'HomeScreen.dart';
+import 'BankScreen.dart';
 
 /*
 var integer;
-var integuerOne;
+var integerOne;
 class HolaMundo{
 }
 void Function(){
@@ -60,7 +59,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Bank Layout",
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomeScreen(userHomeVar: userHome),
+      home: BankScreen(userHomeVar: userHome),
     );
   }
 }
