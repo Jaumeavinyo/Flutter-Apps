@@ -5,7 +5,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: Colors.blue.shade50,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -25,37 +25,13 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: GreenButton(),
-                        /*
-                        child: RaisedButton(
-                          child: Text("example text"),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => SecondScreen(),
-                              ),
-                            );
-                          },
-                        ),*/
-                      )
-                    ],
-                  )),
-              Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: RaisedButton(
-                          child: Text("example text"),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => SecondScreen(),
-                              ),
-                            );
-                          },
+                        child: GreenButton(
+                          //FIRST MAIN BUTTON
+                          radiusVar: 10,
+                          borderColorVar: Colors.black,
+                          borderWidthVar: 2,
+                          buttonTextVar: "Calendar",
+                          colorVar: Colors.blue.shade200,
                         ),
                       )
                     ],
@@ -67,49 +43,35 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: RaisedButton(
-                          child: Text("example text"),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => SecondScreen(),
-                              ),
-                            );
-                          },
+                        child: GreenButton(
+                          //FIRST MAIN BUTTON
+                          radiusVar: 10,
+                          borderColorVar: Colors.black,
+                          borderWidthVar: 2,
+                          buttonTextVar: "Aquarium",
+                          colorVar: Colors.green.shade200,
                         ),
                       )
                     ],
-                  ))
-              /*RaisedButton(
-                child: Text("Calendar"),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => SecondScreen(),
-                    ),
-                  );
-                },
-              ),
-              RaisedButton(
-                child: Text("Your aquarium"),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => SecondScreen(),
-                    ),
-                  );
-                },
-              ),
-              RaisedButton(
-                child: Text("Forum"),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => SecondScreen(),
-                    ),
-                  );
-                },
-              ),*/
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: GreenButton(
+                          //FIRST MAIN BUTTON
+                          radiusVar: 10,
+                          borderColorVar: Colors.black,
+                          borderWidthVar: 2,
+                          buttonTextVar: "Forum",
+                          colorVar: Colors.purple.shade200,
+                        ),
+                      )
+                    ],
+                  )),
             ],
           ),
         ));
@@ -122,10 +84,14 @@ class GreenButton extends StatelessWidget {
   Color colorVar = Colors.green;
   Color borderColorVar = Colors.black;
   num borderWidthVar = 2;
-  num textLeftSpaceVar = 20;
+
   GreenButton({
-    Key key,
-  }) : super(key: key);
+    @required this.radiusVar,
+    @required this.borderColorVar,
+    @required this.borderWidthVar,
+    @required this.buttonTextVar,
+    @required this.colorVar,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +112,7 @@ class GreenButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(
-                width: textLeftSpaceVar,
+                width: 20,
               ),
               Text("$buttonTextVar"),
               Expanded(
