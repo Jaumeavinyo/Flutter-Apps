@@ -151,7 +151,8 @@ class SecondScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("choose a color"),
+        title: Text("Personal Calendar"),
+        backgroundColor: Colors.blue.shade200,
       ),
     );
   }
