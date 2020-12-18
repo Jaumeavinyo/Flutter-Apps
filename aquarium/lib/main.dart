@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "Flutter Template",
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: Scaffold(appBar: AppBar(title: Text('Probando'))),
+      home: HomeScreen(),
     );
   }
 }
