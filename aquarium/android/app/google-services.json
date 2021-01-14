@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "434586588729",
+    "project_id": "dm-backend-aquarium",
+    "storage_bucket": "dm-backend-aquarium.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434586588729:android:955ce0e087389f7fdbdfe8",
+        "android_client_info": {
+          "package_name": "com.example.aquarium"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "434586588729-mtets37klum0qpga4e6r0dsph9mqk6ol.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFiF0WMF3OMqqT2-yB9lStLKagP8YqFXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "434586588729-mtets37klum0qpga4e6r0dsph9mqk6ol.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
