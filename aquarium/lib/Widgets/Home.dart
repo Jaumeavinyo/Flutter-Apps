@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
         .where('User', isEqualTo: '${user.email}');
     final lastvar = FirebaseFirestore.instance
         .collection('Aquariums')
-        .doc('Bj22xnMHVJRLiNSPsikQ')
+        .doc('${user.email}')
         .collection('Variables')
         .orderBy('Fecha', descending: true);
     return StreamBuilder(

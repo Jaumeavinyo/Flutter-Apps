@@ -1,4 +1,5 @@
 import 'package:aquarium/sign_in_flow/screens/register_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -76,8 +77,24 @@ class _SignInScreenState extends State<SignInScreen> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildErrorPage(String error) {
+    return Center(
+      child: Text(
+        error,
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoading() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildSignIn(QuerySnapshot snapshot) {
     return Scaffold(
       body: Center(
         child: Padding(
@@ -152,6 +169,41 @@ class _SignInScreenState extends State<SignInScreen> {
                           result.email,
                           result.password,
                         );
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .set({
+                          'DesiredVariables': {
+                            'Amoniaco': 0,
+                            'Calcio': 0,
+                            'Carbonatos': 0,
+                            'Fosfatos': 0,
+                            'Magnesio': 0,
+                            'Nitratos': 0,
+                            'Nitritos': 0,
+                            'Potasio': 0,
+                            'Salinidad': 0,
+                            'Silicatos': 0
+                          },
+                          'User': result.email,
+                        });
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .collection('Variables')
+                            .add({
+                          'Amoniaco': 0,
+                          'Calcio': 0,
+                          'Carbonatos': 0,
+                          'Fosfatos': 0,
+                          'Magnesio': 0,
+                          'Nitratos': 0,
+                          'Nitritos': 0,
+                          'Potasio': 0,
+                          'Salinidad': 0,
+                          'Silicatos': 0,
+                          'Fecha': DateTime.now(),
+                        });
                       });
                     },
                   ),
@@ -161,6 +213,27 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final aquariums = FirebaseFirestore.instance.collection('Aquariums');
+    return StreamBuilder(
+      stream: aquariums.snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return _buildErrorPage(snapshot.error.toString());
+        }
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return _buildLoading();
+          case ConnectionState.active:
+            return _buildSignIn(snapshot.data);
+          default: // ConnectionState.none  // ConnectionState.done
+            return _buildErrorPage("Unreachable!!!");
+        }
+      },
     );
   }
 }

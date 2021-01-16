@@ -1,5 +1,6 @@
 import 'package:aquarium/Widgets/Home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Forum extends StatefulWidget {
@@ -10,6 +11,7 @@ class Forum extends StatefulWidget {
 class _ForumState extends State<Forum> {
   bool _insideAquarium = false;
   int _index = 0;
+  String _uid = 'darla@gmail.com';
 
   @override
   Widget _buildErrorPage(String error) {
@@ -50,6 +52,7 @@ class _ForumState extends State<Forum> {
                   setState(() {
                     _index = index;
                     _insideAquarium = !_insideAquarium;
+                    _uid = docs[index].id;
                   });
                 },
               ),
@@ -86,7 +89,7 @@ class _ForumState extends State<Forum> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    DesiredVariables(aquarium: lastvar),
+                    DesiredVariables(aquarium: docs[_index]),
                     SizedBox(height: 30),
                     Text(
                       'Graph',
@@ -129,9 +132,13 @@ class _ForumState extends State<Forum> {
 
   @override
   Widget build(BuildContext context) {
-    final aquariums = FirebaseFirestore.instance.collection('Aquariums');
-    final lastvar = aquariums
-        .doc('Bj22xnMHVJRLiNSPsikQ')
+    final user = FirebaseAuth.instance.currentUser;
+    final aquariums = FirebaseFirestore.instance
+        .collection('Aquariums')
+        .where('User', isNotEqualTo: user.email);
+    final lastvar = FirebaseFirestore.instance
+        .collection('Aquariums')
+        .doc('$_uid')
         .collection('Variables')
         .orderBy('Fecha', descending: true);
     return StreamBuilder(
