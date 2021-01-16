@@ -29,8 +29,9 @@ class _ForumState extends State<Forum> {
     );
   }
 
-  Widget _buildForum(QuerySnapshot snapshot) {
+  Widget _buildForum(QuerySnapshot snapshot, QuerySnapshot lastvarSnapshot) {
     final docs = snapshot.docs;
+    final lastvar = lastvarSnapshot.docs[0];
     bool insideAquarium = _insideAquarium;
 
     if (insideAquarium == false)
@@ -76,7 +77,7 @@ class _ForumState extends State<Forum> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    LastVariablesText(aquarium: docs[_index]),
+                    LastVariablesText(variables: lastvar),
                     SizedBox(height: 30),
                     Text(
                       'Desired Variables',
@@ -85,7 +86,7 @@ class _ForumState extends State<Forum> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    DesiredVariables(aquarium: docs[_index]),
+                    DesiredVariables(aquarium: lastvar),
                     SizedBox(height: 30),
                     Text(
                       'Graph',
@@ -129,6 +130,10 @@ class _ForumState extends State<Forum> {
   @override
   Widget build(BuildContext context) {
     final aquariums = FirebaseFirestore.instance.collection('Aquariums');
+    final lastvar = aquariums
+        .doc('Bj22xnMHVJRLiNSPsikQ')
+        .collection('Variables')
+        .orderBy('Fecha', descending: true);
     return StreamBuilder(
       stream: aquariums.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -139,7 +144,12 @@ class _ForumState extends State<Forum> {
           case ConnectionState.waiting:
             return _buildLoading();
           case ConnectionState.active:
-            return _buildForum(snapshot.data);
+            return StreamBuilder(
+              stream: lastvar.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> lastvarSnapshot) {
+                return _buildForum(snapshot.data, lastvarSnapshot.data);
+              },
+            );
           default: // ConnectionState.none  // ConnectionState.done
             return _buildErrorPage("Unreachable!!!");
         }

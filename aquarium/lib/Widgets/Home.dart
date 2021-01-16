@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,11 +70,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildHome(QuerySnapshot snapshot) {
+  Widget _buildHome(QuerySnapshot snapshot, QuerySnapshot lastvarSnapshot) {
     final docs = snapshot.docs;
     final aquarium = docs[0];
+    final lastvar = lastvarSnapshot.docs[0];
     final desiredvar = aquarium['DesiredVariables'];
-    final lastvar = aquarium['LastVariables'];
+    //final lastvar = aquarium['LastVariables'];
     _ammoniaController.text = '${lastvar['Amoniaco']}';
     _calciumController.text = '${lastvar['Calcio']}';
     _carbonatesController.text = '${lastvar['Carbonatos']}';
@@ -109,7 +111,8 @@ class _HomeState extends State<Home> {
                 potassiumController: _potassiumController,
                 salinityController: _salinityController,
                 silicatesController: _silicatesController,
-                aquarium: aquarium),
+                aquarium: aquarium,
+                lastvar: lastvar),
             SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,7 +154,15 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context) {
-    final aquariums = FirebaseFirestore.instance.collection('Aquariums');
+    final user = FirebaseAuth.instance.currentUser;
+    final aquariums = FirebaseFirestore.instance
+        .collection('Aquariums')
+        .where('User', isEqualTo: '${user.email}');
+    final lastvar = FirebaseFirestore.instance
+        .collection('Aquariums')
+        .doc('Bj22xnMHVJRLiNSPsikQ')
+        .collection('Variables')
+        .orderBy('Fecha', descending: true);
     return StreamBuilder(
       stream: aquariums.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -162,7 +173,12 @@ class _HomeState extends State<Home> {
           case ConnectionState.waiting:
             return _buildLoading();
           case ConnectionState.active:
-            return _buildHome(snapshot.data);
+            return StreamBuilder(
+              stream: lastvar.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> lastvarSnapshot) {
+                return _buildHome(snapshot.data, lastvarSnapshot.data);
+              },
+            );
           default: // ConnectionState.none  // ConnectionState.done
             return _buildErrorPage("Unreachable!!!");
         }
@@ -185,6 +201,7 @@ class LastVariables extends StatelessWidget {
     @required TextEditingController salinityController,
     @required TextEditingController silicatesController,
     @required this.aquarium,
+    @required this.lastvar,
   })  : _ammoniaController = ammoniaController,
         _calciumController = calciumController,
         _carbonatesController = carbonatesController,
@@ -208,6 +225,7 @@ class LastVariables extends StatelessWidget {
   final TextEditingController _salinityController;
   final TextEditingController _silicatesController;
   final QueryDocumentSnapshot aquarium;
+  final QueryDocumentSnapshot lastvar;
 
   @override
   Widget build(BuildContext context) {
@@ -221,6 +239,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _ammoniaController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'NH3',
               variable: 'Amoniaco',
             ),
@@ -229,6 +248,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _calciumController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'Ca',
               variable: 'Calcio',
             ),
@@ -237,6 +257,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _carbonatesController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'KH',
               variable: 'Carbonatos',
             ),
@@ -245,6 +266,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _phosphatesController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'Phos.',
               variable: 'Fosfatos',
             ),
@@ -253,6 +275,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _magnesiumController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'Mg',
               variable: 'Magnesio',
             ),
@@ -265,6 +288,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _nitratesController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'NO3',
               variable: 'Nitratos',
             ),
@@ -273,6 +297,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _nitritesController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'NO2',
               variable: 'Nitritos',
             ),
@@ -281,6 +306,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _potassiumController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'K',
               variable: 'Potasio',
             ),
@@ -289,6 +315,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _salinityController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'Salin.',
               variable: 'Salinidad',
             ),
@@ -297,6 +324,7 @@ class LastVariables extends StatelessWidget {
               ammoniaController: _silicatesController,
               aquariums: aquariums,
               aquarium: aquarium,
+              vars: lastvar,
               tag: 'Sil.',
               variable: 'Silicatos',
             ),
@@ -313,6 +341,7 @@ class LastVarItem extends StatelessWidget {
     @required TextEditingController ammoniaController,
     @required this.aquariums,
     @required this.aquarium,
+    @required this.vars,
     @required this.tag,
     @required this.variable,
   })  : _ammoniaController = ammoniaController,
@@ -321,6 +350,7 @@ class LastVarItem extends StatelessWidget {
   final TextEditingController _ammoniaController;
   final CollectionReference aquariums;
   final QueryDocumentSnapshot aquarium;
+  final QueryDocumentSnapshot vars;
   final String tag;
   final String variable;
 
@@ -332,10 +362,21 @@ class LastVarItem extends StatelessWidget {
           labelText: tag,
         ),
         controller: _ammoniaController,
-        onChanged: (newValue) {
-          aquariums
-              .doc(aquarium.id)
-              .update({'LastVariables.$variable': num.parse(newValue)});
+        onSubmitted: (newValue) {
+          aquariums.doc(aquarium.id).collection('Variables').add({
+            'Amoniaco': vars['Amoniaco'],
+            'Calcio': vars['Calcio'],
+            'Carbonatos': vars['Carbonatos'],
+            'Fosfatos': vars['Fosfatos'],
+            'Magnesio': vars['Magnesio'],
+            'Nitratos': vars['Nitratos'],
+            'Nitritos': vars['Nitritos'],
+            'Potasio': vars['Potasio'],
+            'Salinidad': vars['Salinidad'],
+            'Silicatos': vars['Silicatos'],
+            '$variable': num.parse(newValue),
+            'Fecha': DateTime.now(),
+          });
         },
       ),
     );
@@ -454,10 +495,10 @@ class DesiredVarItem extends StatelessWidget {
 class LastVariablesText extends StatelessWidget {
   const LastVariablesText({
     Key key,
-    @required this.aquarium,
+    @required this.variables,
   }) : super(key: key);
 
-  final QueryDocumentSnapshot aquarium;
+  final QueryDocumentSnapshot variables;
 
   @override
   Widget build(BuildContext context) {
@@ -467,27 +508,27 @@ class LastVariablesText extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Amoniaco',
               variableName: 'NH3',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Calcio',
               variableName: 'Ca',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Carbonatos',
               variableName: 'KH',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Fosfatos',
               variableName: 'Phos.',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Magnesio',
               variableName: 'Mg',
             ),
@@ -498,27 +539,27 @@ class LastVariablesText extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Nitritos',
               variableName: 'NO3',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Nitratos',
               variableName: 'NO2',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Potasio',
               variableName: 'K',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Salinidad',
               variableName: 'Salin.',
             ),
             LastVarTextItem(
-              aquarium: aquarium,
+              variables: variables,
               variable: 'Silicatos',
               variableName: 'Sil.',
             ),
@@ -532,12 +573,12 @@ class LastVariablesText extends StatelessWidget {
 class LastVarTextItem extends StatelessWidget {
   const LastVarTextItem({
     Key key,
-    @required this.aquarium,
+    @required this.variables,
     @required this.variable,
     @required this.variableName,
   }) : super(key: key);
 
-  final QueryDocumentSnapshot aquarium;
+  final QueryDocumentSnapshot variables;
   final String variable;
   final String variableName;
 
@@ -553,7 +594,7 @@ class LastVarTextItem extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(" ${aquarium['LastVariables'][variable]}"),
+        Text(" ${variables[variable]}"),
       ],
     );
   }

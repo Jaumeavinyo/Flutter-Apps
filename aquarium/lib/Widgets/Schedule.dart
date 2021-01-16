@@ -51,7 +51,7 @@ class _ScheduleState extends State<Schedule> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    LastVariablesText(aquarium: aquarium),
+                    //LastVariablesText(variables: variables),
                     SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
