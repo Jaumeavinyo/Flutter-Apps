@@ -1,6 +1,7 @@
 import 'package:aquarium/Widgets/Schedule.dart';
 import 'package:aquarium/Widgets/Forum.dart';
 import 'package:aquarium/Widgets/Home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -41,6 +42,13 @@ class _MainScreenState extends State<MainScreen> {
       return Scaffold(
         appBar: AppBar(
           title: Text('My Aquarium', style: TextStyle(color: Colors.white)),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+          ),
         ),
         body: Home(),
         bottomNavigationBar: BottomNavigationBar(

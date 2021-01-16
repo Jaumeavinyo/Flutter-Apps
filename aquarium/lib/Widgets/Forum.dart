@@ -1,5 +1,6 @@
 import 'package:aquarium/Widgets/Home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Forum extends StatefulWidget {
@@ -10,6 +11,7 @@ class Forum extends StatefulWidget {
 class _ForumState extends State<Forum> {
   bool _insideAquarium = false;
   int _index = 0;
+  String _uid = 'darla@gmail.com';
 
   @override
   Widget _buildErrorPage(String error) {
@@ -29,8 +31,9 @@ class _ForumState extends State<Forum> {
     );
   }
 
-  Widget _buildForum(QuerySnapshot snapshot) {
+  Widget _buildForum(QuerySnapshot snapshot, QuerySnapshot lastvarSnapshot) {
     final docs = snapshot.docs;
+    final lastvar = lastvarSnapshot.docs[0];
     bool insideAquarium = _insideAquarium;
 
     if (insideAquarium == false)
@@ -49,6 +52,7 @@ class _ForumState extends State<Forum> {
                   setState(() {
                     _index = index;
                     _insideAquarium = !_insideAquarium;
+                    _uid = docs[index].id;
                   });
                 },
               ),
@@ -76,7 +80,7 @@ class _ForumState extends State<Forum> {
                       ),
                     ),
                     SizedBox(height: 10),
-                    LastVariablesText(aquarium: docs[_index]),
+                    LastVariablesText(variables: lastvar),
                     SizedBox(height: 30),
                     Text(
                       'Desired Variables',
@@ -128,7 +132,15 @@ class _ForumState extends State<Forum> {
 
   @override
   Widget build(BuildContext context) {
-    final aquariums = FirebaseFirestore.instance.collection('Aquariums');
+    final user = FirebaseAuth.instance.currentUser;
+    final aquariums = FirebaseFirestore.instance
+        .collection('Aquariums')
+        .where('User', isNotEqualTo: user.email);
+    final lastvar = FirebaseFirestore.instance
+        .collection('Aquariums')
+        .doc('$_uid')
+        .collection('Variables')
+        .orderBy('Fecha', descending: true);
     return StreamBuilder(
       stream: aquariums.snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -139,7 +151,12 @@ class _ForumState extends State<Forum> {
           case ConnectionState.waiting:
             return _buildLoading();
           case ConnectionState.active:
-            return _buildForum(snapshot.data);
+            return StreamBuilder(
+              stream: lastvar.snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> lastvarSnapshot) {
+                return _buildForum(snapshot.data, lastvarSnapshot.data);
+              },
+            );
           default: // ConnectionState.none  // ConnectionState.done
             return _buildErrorPage("Unreachable!!!");
         }
