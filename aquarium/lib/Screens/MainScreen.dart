@@ -3,6 +3,7 @@ import 'package:aquarium/Widgets/Forum.dart';
 import 'package:aquarium/Widgets/Home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 /// This is the stateful widget that the main application instantiates.
 class MainScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @required
+  List<Event> Events; //CALENDAR_OP
   int _selectedIndex = 1;
   void _onItemTapped(int index) {
     setState(() {
@@ -23,6 +25,18 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Event> _getDataSource() {
+      //CALENDAR_OP
+      Events = <Event>[];
+      final DateTime today = DateTime.now();
+      final DateTime startTime =
+          DateTime(today.year, today.month, today.day, 9, 0, 0);
+      final DateTime endTime = startTime.add(const Duration(hours: 2));
+      Events.add(Event(
+          'WATER CHANGE', startTime, endTime, const Color(0xFF0F8644), false));
+      return Events;
+    }
+
     if (_selectedIndex == 1)
       return Scaffold(
         appBar: AppBar(
@@ -53,7 +67,14 @@ class _MainScreenState extends State<MainScreen> {
         appBar: AppBar(
           title: Text('Schedule', style: TextStyle(color: Colors.white)),
         ),
-        body: Schedule(),
+        body: SfCalendar(
+          //CALENDAR_OP
+          view: CalendarView.month,
+          dataSource: EventDataSource(_getDataSource()),
+          monthViewSettings: MonthViewSettings(
+              numberOfWeeksInView: 4,
+              appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(

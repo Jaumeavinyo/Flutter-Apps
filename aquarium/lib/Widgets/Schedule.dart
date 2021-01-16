@@ -1,13 +1,69 @@
-import 'package:aquarium/Widgets/Home.dart';
+//########################
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+class EventDataSource extends CalendarDataSource {
+  List<Event> meetings;
+  EventDataSource(List<Event> source) {
+    appointments = source;
+  }
+
+  @override
+  DateTime getStartTime(int index) {
+    return appointments[index].from;
+  }
+
+  @override
+  DateTime getEndTime(int index) {
+    return appointments[index].to;
+  }
+
+  @override
+  String getSubject(int index) {
+    return appointments[index].eventName;
+  }
+
+  @override
+  Color getColor(int index) {
+    return appointments[index].background;
+  }
+
+  @override
+  bool isAllDay(int index) {
+    return appointments[index].isAllDay;
+  }
+}
+
+class Event {
+  Event(this.eventName, this.from, this.to, this.background, this.isAllDay);
+
+  String eventName;
+  DateTime from;
+  DateTime to;
+  Color background;
+  bool isAllDay;
+}
+
+/*
 class Schedule extends StatefulWidget {
+  CalendarController _controller;
+
   @override
   _ScheduleState createState() => _ScheduleState();
 }
 
 class _ScheduleState extends State<Schedule> {
+  CalendarController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = CalendarController();
+  }
+
   @override
   Widget _buildErrorPage(String error) {
     return Center(
@@ -34,86 +90,10 @@ class _ScheduleState extends State<Schedule> {
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 5),
-                    Text(
-                      'Day $_index Variables',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    LastVariablesText(aquarium: aquarium),
-                    SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Events',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                          width: 90,
-                          child: RaisedButton(
-                            child: Text('Add Event',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                )),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      height: 30,
-                      child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, int index) {
-                          return Container(
-                            height: 30,
-                            child: ListTile(
-                              title: Text('Event $_index'),
-                              leading: Container(
-                                width: 10,
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-              flex: 1,
-              child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Day(index: index),
-                );
-              }))
+        children: <Widget>[
+          TableCalendar(
+            calendarController: _controller,
+          )
         ],
       ),
     );
@@ -141,34 +121,4 @@ class _ScheduleState extends State<Schedule> {
   }
 }
 
-class Day extends StatelessWidget {
-  const Day({
-    Key key,
-    @required this.index,
-  }) : super(key: key);
-
-  final int index;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      child: SizedBox(
-        width: 300,
-        height: 100,
-        child: Center(
-          child: Text(
-            "Day ${index + 1}",
-            style: TextStyle(
-                color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-      margin: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: Colors.green[400],
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-    );
-  }
-}
+*/
