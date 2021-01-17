@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 class EmailAndPassword {
-  String email, password;
-  EmailAndPassword(this.email, this.password);
+  String email, password, nickname;
+  EmailAndPassword(this.email, this.password, this.nickname);
 }
 
 class RegisterScreen extends StatefulWidget {
@@ -12,12 +11,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  TextEditingController _email, _password;
+  TextEditingController _email, _password, _nickname;
 
   @override
   void initState() {
     _email = TextEditingController();
     _password = TextEditingController();
+    _nickname = TextEditingController();
     super.initState();
   }
 
@@ -25,6 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _email.dispose();
     _password.dispose();
+    _nickname.dispose();
     super.dispose();
   }
 
@@ -33,61 +34,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: Colors.blue[50],
       body: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 60),
-              Text(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(height: 60),
+            Text(
+              'Register',
+              style: TextStyle(
+                fontSize: 28,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _email,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: 'email',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _password,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'password',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              controller: _nickname,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'nickname',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1),
+                ),
+              ),
+            ),
+            SizedBox(height: 32),
+            FlatButton(
+              color: Theme.of(context).primaryColor,
+              child: Text(
                 'Register',
                 style: TextStyle(
-                  fontSize: 28,
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.white,
+                  fontSize: 18,
                 ),
               ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _email,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'email',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'password',
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(width: 1),
-                  ),
-                ),
-              ),
-              SizedBox(height: 32),
-              FlatButton(
-                color: Theme.of(context).primaryColor,
-                child: Text(
-                  'Register',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop(
-                    EmailAndPassword(_email.text, _password.text),
-                  );
-                },
-              ),
-              
-            ],
-          ),
+              onPressed: () {
+                Navigator.of(context).pop(
+                  EmailAndPassword(_email.text, _password.text, _nickname.text),
+                );
+              },
+            ),
+          ],
         ),
+      ),
     );
   }
 }

@@ -186,6 +186,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             'Silicatos': 0
                           },
                           'User': result.email,
+                          'Nick': result.nickname,
                         });
                         FirebaseFirestore.instance
                             .collection('Aquariums')
@@ -203,6 +204,20 @@ class _SignInScreenState extends State<SignInScreen> {
                           'Salinidad': 0,
                           'Silicatos': 0,
                           'Fecha': DateTime.now(),
+                        });
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .collection('Events')
+                            .add({
+                          'Texto': 'Sample',
+                          'Inicio': DateTime.now(),
+                          'Fin': DateTime.utc(
+                              DateTime.now().year,
+                              DateTime.now().month,
+                              DateTime.now().day,
+                              DateTime.now().hour + 1),
+                          'Color': 'FF0080'
                         });
                       });
                     },

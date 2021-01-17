@@ -11,7 +11,7 @@ class Forum extends StatefulWidget {
 class _ForumState extends State<Forum> {
   bool _insideAquarium = false;
   int _index = 0;
-  String _uid = 'darla@gmail.com';
+  String _uid = 'glenncl5@gmail.com';
 
   @override
   Widget _buildErrorPage(String error) {
@@ -46,7 +46,7 @@ class _ForumState extends State<Forum> {
             return Card(
               child: InkWell(
                 child: ListTile(
-                  title: Text("${aquarium['User']}'s Aquarium"),
+                  title: Text("${aquarium['Nick']}'s Aquarium"),
                 ),
                 onTap: () {
                   setState(() {
@@ -76,7 +76,7 @@ class _ForumState extends State<Forum> {
                     Text(
                       'Last Variables',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                       ),
                     ),
                     SizedBox(height: 10),
@@ -85,7 +85,7 @@ class _ForumState extends State<Forum> {
                     Text(
                       'Desired Variables',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                       ),
                     ),
                     SizedBox(height: 10),
@@ -94,7 +94,7 @@ class _ForumState extends State<Forum> {
                     Text(
                       'Graph',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                       ),
                     ),
                     SizedBox(height: 10),
@@ -107,11 +107,9 @@ class _ForumState extends State<Forum> {
             Expanded(
               flex: 1,
               child: Container(
-                width: 45,
+                width: 50,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(30.0),
-                  ),
+                  shape: BoxShape.circle,
                   color: Colors.lightBlue,
                 ),
                 child: IconButton(
