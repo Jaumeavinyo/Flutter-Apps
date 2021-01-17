@@ -276,7 +276,7 @@ class _ScheduleState extends State<Schedule> {
                 strokeWidth: 4,
                 thumbSize: 36,
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               RaisedButton(
                   color: Colors.lightBlue,
                   child: Text('Create Event',
@@ -305,6 +305,23 @@ class _ScheduleState extends State<Schedule> {
                       _insideEvent = !_insideEvent;
                     });
                   }),
+              SizedBox(height: 50),
+              Container(
+                width: 50,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.lightBlue,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    setState(() {
+                      _insideEvent = !_insideEvent;
+                    });
+                  },
+                  color: Colors.white,
+                ),
+              ),
             ],
           ),
         ),

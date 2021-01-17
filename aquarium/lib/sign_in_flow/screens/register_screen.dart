@@ -72,7 +72,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             SizedBox(height: 16),
             TextField(
               controller: _nickname,
-              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'nickname',
                 border: OutlineInputBorder(
