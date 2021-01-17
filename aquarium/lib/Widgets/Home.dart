@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,7 +22,6 @@ class _HomeState extends State<Home> {
   TextEditingController _potassiumController;
   TextEditingController _salinityController;
   TextEditingController _silicatesController;
-  bool _insideEdit = false;
 
   @override
   void initState() {
@@ -74,157 +74,147 @@ class _HomeState extends State<Home> {
   Widget _buildHome(QuerySnapshot snapshot, QuerySnapshot lastvarSnapshot) {
     final docs = snapshot.docs;
     final aquarium = docs[0];
-    bool insideEdit = _insideEdit;
     final lastvar = lastvarSnapshot.docs[0];
+    final desiredvar = aquarium['DesiredVariables'];
 
-    if (insideEdit == false) {
-      _ammoniaController.text = '${lastvar['Amoniaco']}';
-      _calciumController.text = '${lastvar['Calcio']}';
-      _carbonatesController.text = '${lastvar['Carbonatos']}';
-      _phosphatesController.text = '${lastvar['Fosfatos']}';
-      _magnesiumController.text = '${lastvar['Magnesio']}';
-      _nitratesController.text = '${lastvar['Nitratos']}';
-      _nitritesController.text = '${lastvar['Nitritos']}';
-      _potassiumController.text = '${lastvar['Potasio']}';
-      _salinityController.text = '${lastvar['Salinidad']}';
-      _silicatesController.text = '${lastvar['Silicatos']}';
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 5),
-              Text(
-                'Last Variables',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              LastVariables(
-                  ammoniaController: _ammoniaController,
-                  calciumController: _calciumController,
-                  carbonatesController: _carbonatesController,
-                  phosphatesController: _phosphatesController,
-                  magnesiumController: _magnesiumController,
-                  nitratesController: _nitratesController,
-                  nitritesController: _nitritesController,
-                  potassiumController: _potassiumController,
-                  salinityController: _salinityController,
-                  silicatesController: _silicatesController,
-                  aquarium: aquarium,
-                  lastvar: lastvar),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Desired Variables',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                    width: 60,
-                    child: RaisedButton(
-                      color: Colors.lightBlue[200],
-                      child: Text('Edit',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white,
-                          )),
-                      onPressed: () {
-                        setState(() {
-                          _insideEdit = !_insideEdit;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 15),
-              DesiredVariables(aquarium: aquarium),
-              SizedBox(height: 30),
-              Text(
-                'Graph',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 15),
-              Image.asset('assets/images/graph.jpg'),
-            ],
-          ),
-        ),
-      );
-    } else if (insideEdit == true) {
-      _ammoniaController.text = '${aquarium['DesiredVariables']['Amoniaco']}';
-      _calciumController.text = '${aquarium['DesiredVariables']['Calcio']}';
-      _carbonatesController.text =
-          '${aquarium['DesiredVariables']['Carbonatos']}';
-      _phosphatesController.text =
-          '${aquarium['DesiredVariables']['Fosfatos']}';
-      _magnesiumController.text = '${aquarium['DesiredVariables']['Magnesio']}';
-      _nitratesController.text = '${aquarium['DesiredVariables']['Nitratos']}';
-      _nitritesController.text = '${aquarium['DesiredVariables']['Nitritos']}';
-      _potassiumController.text = '${aquarium['DesiredVariables']['Potasio']}';
-      _salinityController.text = '${aquarium['DesiredVariables']['Salinidad']}';
-      _silicatesController.text =
-          '${aquarium['DesiredVariables']['Silicatos']}';
-      return Padding(
+    List<FlSpot> pointsAmoniaco = [];
+
+    for (int i = 0; i < lastvarSnapshot.docs.length; i++) {
+      FlSpot spot = FlSpot(
+          (i * 10).toDouble(), lastvarSnapshot.docs[i]["Amoniaco"].toDouble());
+      pointsAmoniaco.add(spot);
+    }
+    List<FlSpot> pointsNitratos = [];
+
+    for (int i = 0; i < lastvarSnapshot.docs.length; i++) {
+      FlSpot spot = FlSpot(
+          (i * 10).toDouble(), lastvarSnapshot.docs[i]["Nitratos"].toDouble());
+      pointsNitratos.add(spot);
+    }
+    List<FlSpot> pointsNitritos = [];
+
+    for (int i = 0; i < lastvarSnapshot.docs.length; i++) {
+      FlSpot spot = FlSpot(
+          (i * 10).toDouble(), lastvarSnapshot.docs[i]["Nitritos"].toDouble());
+      pointsNitritos.add(spot);
+    }
+
+    //final lastvar = aquarium['LastVariables'];
+    _ammoniaController.text = '${lastvar['Amoniaco']}';
+    _calciumController.text = '${lastvar['Calcio']}';
+    _carbonatesController.text = '${lastvar['Carbonatos']}';
+    _phosphatesController.text = '${lastvar['Fosfatos']}';
+    _magnesiumController.text = '${lastvar['Magnesio']}';
+    _nitratesController.text = '${lastvar['Nitratos']}';
+    _nitritesController.text = '${lastvar['Nitritos']}';
+    _potassiumController.text = '${lastvar['Potasio']}';
+    _salinityController.text = '${lastvar['Salinidad']}';
+    _silicatesController.text = '${lastvar['Silicatos']}';
+
+    return SingleChildScrollView(
+      child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 50),
+            SizedBox(height: 5),
             Text(
-              'Desired Variables',
+              'Last Variables',
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 18,
               ),
             ),
+            LastVariables(
+                ammoniaController: _ammoniaController,
+                calciumController: _calciumController,
+                carbonatesController: _carbonatesController,
+                phosphatesController: _phosphatesController,
+                magnesiumController: _magnesiumController,
+                nitratesController: _nitratesController,
+                nitritesController: _nitritesController,
+                potassiumController: _potassiumController,
+                salinityController: _salinityController,
+                silicatesController: _silicatesController,
+                aquarium: aquarium,
+                lastvar: lastvar),
             SizedBox(height: 30),
-            EditDesiredVariables(
-              ammoniaController: _ammoniaController,
-              calciumController: _calciumController,
-              carbonatesController: _carbonatesController,
-              phosphatesController: _phosphatesController,
-              magnesiumController: _magnesiumController,
-              nitratesController: _nitratesController,
-              nitritesController: _nitritesController,
-              potassiumController: _potassiumController,
-              salinityController: _salinityController,
-              silicatesController: _silicatesController,
-              aquarium: aquarium,
-              lastvar: lastvar,
-            ),
-            SizedBox(height: 40),
-            RaisedButton(
-              color: Colors.lightBlue,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.lightBlue,
-                ),
-                child: Text(
-                  'Submit',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Desired Variables',
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
-              ),
-              onPressed: () {
-                setState(() {
-                  _insideEdit = !_insideEdit;
-                });
-              },
+                SizedBox(
+                  height: 20,
+                  width: 60,
+                  child: RaisedButton(
+                    child: Text('Edit',
+                        style: TextStyle(
+                          fontSize: 11,
+                        )),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 10),
+            DesiredVariables(aquarium: aquarium),
+            SizedBox(height: 30),
+            Text(
+              'Graph',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(height: 10),
+            //Image.asset('assets/images/graph.jpg'),
+            LineChart(
+              LineChartData(
+                  minX: 0,
+                  maxX: 50,
+                  minY: 0,
+                  maxY: 50, //lastvarSnapshot.docs[0 - 1];
+                  lineBarsData: [
+                    LineChartBarData(spots: [
+                      pointsAmoniaco[0],
+                      pointsAmoniaco[1],
+                      pointsAmoniaco[2],
+                      pointsAmoniaco[3],
+                      pointsAmoniaco[4],
+                    ]),
+                    LineChartBarData(spots: [
+                      pointsNitratos[0],
+                      pointsNitratos[1],
+                      pointsNitratos[2],
+                      pointsNitratos[3],
+                      pointsNitratos[4],
+                    ]),
+                    LineChartBarData(spots: [
+                      pointsNitritos[0],
+                      pointsNitritos[1],
+                      pointsNitritos[2],
+                      pointsNitritos[3],
+                      pointsNitritos[4],
+                    ]),
+                  ]),
+            )
           ],
         ),
-      );
-    }
+      ),
+    );
   }
+
+  /*FlSpot(
+                          5,
+                          lastvarSnapshot.docs.length > 0 == true
+                              ? lastvarSnapshot
+                                  .docs[lastvarSnapshot.docs.length - 1]
+                                      ['Amoniaco']
+                                  .toDouble()
+                              : lastvarSnapshot.docs[0]['Amoniaco'].toDouble()),*/
 
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
@@ -450,179 +440,6 @@ class LastVarItem extends StatelessWidget {
             '$variable': num.parse(newValue),
             'Fecha': DateTime.now(),
           });
-        },
-      ),
-    );
-  }
-}
-
-class EditDesiredVariables extends StatelessWidget {
-  const EditDesiredVariables({
-    Key key,
-    @required TextEditingController ammoniaController,
-    @required TextEditingController calciumController,
-    @required TextEditingController carbonatesController,
-    @required TextEditingController phosphatesController,
-    @required TextEditingController magnesiumController,
-    @required TextEditingController nitratesController,
-    @required TextEditingController nitritesController,
-    @required TextEditingController potassiumController,
-    @required TextEditingController salinityController,
-    @required TextEditingController silicatesController,
-    @required this.aquarium,
-    @required this.lastvar,
-  })  : _ammoniaController = ammoniaController,
-        _calciumController = calciumController,
-        _carbonatesController = carbonatesController,
-        _phosphatesController = phosphatesController,
-        _magnesiumController = magnesiumController,
-        _nitratesController = nitratesController,
-        _nitritesController = nitritesController,
-        _potassiumController = potassiumController,
-        _salinityController = salinityController,
-        _silicatesController = silicatesController,
-        super(key: key);
-
-  final TextEditingController _ammoniaController;
-  final TextEditingController _calciumController;
-  final TextEditingController _carbonatesController;
-  final TextEditingController _phosphatesController;
-  final TextEditingController _magnesiumController;
-  final TextEditingController _nitratesController;
-  final TextEditingController _nitritesController;
-  final TextEditingController _potassiumController;
-  final TextEditingController _salinityController;
-  final TextEditingController _silicatesController;
-  final QueryDocumentSnapshot aquarium;
-  final QueryDocumentSnapshot lastvar;
-
-  @override
-  Widget build(BuildContext context) {
-    final aquariums = FirebaseFirestore.instance.collection('Aquariums');
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            NewDesiredVarItem(
-              ammoniaController: _ammoniaController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'NH3',
-              variable: 'Amoniaco',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _calciumController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'Ca',
-              variable: 'Calcio',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _carbonatesController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'KH',
-              variable: 'Carbonatos',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _phosphatesController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'Phos.',
-              variable: 'Fosfatos',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _magnesiumController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'Mg',
-              variable: 'Magnesio',
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            NewDesiredVarItem(
-              ammoniaController: _nitratesController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'NO3',
-              variable: 'Nitratos',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _nitritesController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'NO2',
-              variable: 'Nitritos',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _potassiumController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'K',
-              variable: 'Potasio',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _salinityController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'Salin.',
-              variable: 'Salinidad',
-            ),
-            SizedBox(width: 20),
-            NewDesiredVarItem(
-              ammoniaController: _silicatesController,
-              aquariums: aquariums,
-              aquarium: aquarium,
-              tag: 'Sil.',
-              variable: 'Silicatos',
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class NewDesiredVarItem extends StatelessWidget {
-  const NewDesiredVarItem({
-    Key key,
-    @required TextEditingController ammoniaController,
-    @required this.aquariums,
-    @required this.aquarium,
-    @required this.tag,
-    @required this.variable,
-  })  : _ammoniaController = ammoniaController,
-        super(key: key);
-
-  final TextEditingController _ammoniaController;
-  final CollectionReference aquariums;
-  final QueryDocumentSnapshot aquarium;
-  final String tag;
-  final String variable;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: tag,
-        ),
-        controller: _ammoniaController,
-        onSubmitted: (newValue) {
-          aquariums
-              .doc(aquarium.id)
-              .update({'DesiredVariables.$variable': num.parse(newValue)});
         },
       ),
     );
