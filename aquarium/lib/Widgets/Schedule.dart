@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_circle_color_picker/flutter_circle_color_picker.dart';
@@ -57,9 +58,9 @@ class Schedule extends StatefulWidget {
 class _ScheduleState extends State<Schedule> {
   CalendarController _controller;
   TextEditingController _text;
-  TextEditingController _start;
-  TextEditingController _end;
-  Color _color;
+  String _color;
+  DateTime _start;
+  DateTime _end;
   bool _insideEvent = false;
   List<Event> Events; //CALENDAR_OP
 
@@ -68,6 +69,14 @@ class _ScheduleState extends State<Schedule> {
     // TODO: implement initState
     super.initState();
     _controller = CalendarController();
+    _text = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    _text.dispose();
   }
 
   @override
@@ -79,6 +88,27 @@ class _ScheduleState extends State<Schedule> {
           color: Colors.red,
         ),
       ),
+    );
+  }
+
+  Widget _buildAlertDialog() {
+    return AlertDialog(
+      title: Text('Delete Events'),
+      content: Text("Are you sure you want to delete all your Events?"),
+      actions: [
+        FlatButton(
+            child: Text("Yes"),
+            textColor: Colors.blue,
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            }),
+        FlatButton(
+            child: Text("No"),
+            textColor: Colors.red,
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            }),
+      ],
     );
   }
 
@@ -138,52 +168,145 @@ class _ScheduleState extends State<Schedule> {
               ),
             ),
             SizedBox(height: 20),
-            RaisedButton(
-                child: Text('Add Event'),
-                onPressed: () {
-                  setState(() {
-                    _insideEvent = !_insideEvent;
-                  });
-                }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                RaisedButton(
+                    child: Text('Delete Events',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.red,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) => _buildAlertDialog(),
+                      ).then((result) {
+                        if (result == true)
+                          for (int i = 0; i < docs.length; i++) {
+                            FirebaseFirestore.instance
+                                .collection('Aquariums')
+                                .doc(
+                                    '${FirebaseAuth.instance.currentUser.email}')
+                                .collection('Events')
+                                .doc(docs[i].id)
+                                .delete();
+                          }
+                      });
+                    }),
+                RaisedButton(
+                    child: Text('Add Event',
+                        style: TextStyle(color: Colors.white)),
+                    color: Colors.lightBlue,
+                    onPressed: () {
+                      setState(() {
+                        _insideEvent = !_insideEvent;
+                      });
+                    }),
+              ],
+            ),
           ],
         ),
       );
     else if (_insideEvent == true) {
       return Padding(
         padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Select Color',
-              style: TextStyle(
-                fontSize: 20,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              DateTimePicker(
+                type: DateTimePickerType.dateTime,
+                initialValue: '',
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                dateLabelText: 'Start',
+                onChanged: (val) {
+                  _start = DateTime.parse(val);
+                },
               ),
-            ),
-            SizedBox(height: 15),
-            CircleColorPicker(
-              initialColor: Colors.blue,
-              onChanged: (color) {
-                _color = color;
-              },
-              size: const Size(240, 240),
-              strokeWidth: 4,
-              thumbSize: 36,
-            ),
-            SizedBox(height: 50),
-            RaisedButton(
-                color: Colors.lightBlue,
-                child: Text('Create Event',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    )),
-                onPressed: () {
-                  setState(() {
-                    _insideEvent = !_insideEvent;
-                  });
-                }),
-          ],
+              DateTimePicker(
+                type: DateTimePickerType.dateTime,
+                initialValue: '',
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+                dateLabelText: 'End',
+                onChanged: (val) {
+                  _end = DateTime.parse(val);
+                },
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Text',
+                ),
+                controller: _text,
+                onSubmitted: (newValue) {
+                  _text.text = newValue;
+                },
+              ),
+              SizedBox(height: 25),
+              CircleColorPicker(
+                textStyle: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+                initialColor: Colors.pink,
+                onChanged: (color) {
+                  String redzero = '';
+                  String greenzero = '';
+                  String bluezero = '';
+                  if (color.red.toRadixString(16).length == 1) {
+                    redzero = '0';
+                  } else {
+                    redzero = '';
+                  }
+                  if (color.blue.toRadixString(16).length == 1) {
+                    bluezero = '0';
+                  } else {
+                    bluezero = '';
+                  }
+                  if (color.green.toRadixString(16).length == 1) {
+                    greenzero = '0';
+                  } else {
+                    greenzero = '';
+                  }
+                  _color =
+                      '$redzero${color.red.toRadixString(16)}$greenzero${color.green.toRadixString(16)}$redzero${color.blue.toRadixString(16)}';
+                  print(_color);
+                },
+                size: const Size(240, 240),
+                strokeWidth: 4,
+                thumbSize: 36,
+              ),
+              SizedBox(height: 50),
+              RaisedButton(
+                  color: Colors.lightBlue,
+                  child: Text('Create Event',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      )),
+                  onPressed: () {
+                    if (_start != null &&
+                        _end != null &&
+                        _text.text != null &&
+                        _color != null)
+                      FirebaseFirestore.instance
+                          .collection('Aquariums')
+                          .doc('${FirebaseAuth.instance.currentUser.email}')
+                          .collection('Events')
+                          .doc(
+                              '${_start.year}${_start.month}${_start.day}${_start.hour}${_start.minute}')
+                          .set({
+                        'Texto': _text.text,
+                        'Inicio': _start,
+                        'Fin': _end,
+                        'Color': _color,
+                      });
+                    setState(() {
+                      _insideEvent = !_insideEvent;
+                    });
+                  }),
+            ],
+          ),
         ),
       );
     }

@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   cloud_firestore: ^0.14.4
   cupertino_icons: ^1.0.1
+  date_time_picker: ^1.1.1
   firebase_auth: ^0.18.3+1
   flutter_circle_color_picker: ^0.2.0
   font_awesome_flutter: ^8.11.0

@@ -209,7 +209,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             .collection('Aquariums')
                             .doc('${result.email}')
                             .collection('Events')
-                            .add({
+                            .doc(
+                                '${DateTime.now().year}${DateTime.now().month}${DateTime.now().day}${DateTime.now().hour}${DateTime.now().minute}')
+                            .set({
                           'Texto': 'Sample',
                           'Inicio': DateTime.now(),
                           'Fin': DateTime.utc(
