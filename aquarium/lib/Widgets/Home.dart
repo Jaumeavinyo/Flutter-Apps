@@ -81,21 +81,21 @@ class _HomeState extends State<Home> {
 
     for (int i = 0; i < lastvarSnapshot.docs.length; i++) {
       FlSpot spot = FlSpot(
-          (i * 10).toDouble(), lastvarSnapshot.docs[i]["Amoniaco"].toDouble());
+          (i).toDouble(), lastvarSnapshot.docs[i]["Amoniaco"].toDouble());
       pointsAmoniaco.add(spot);
     }
     List<FlSpot> pointsNitratos = [];
 
     for (int i = 0; i < lastvarSnapshot.docs.length; i++) {
       FlSpot spot = FlSpot(
-          (i * 10).toDouble(), lastvarSnapshot.docs[i]["Nitratos"].toDouble());
+          (i).toDouble(), lastvarSnapshot.docs[i]["Nitratos"].toDouble());
       pointsNitratos.add(spot);
     }
     List<FlSpot> pointsNitritos = [];
 
     for (int i = 0; i < lastvarSnapshot.docs.length; i++) {
       FlSpot spot = FlSpot(
-          (i * 10).toDouble(), lastvarSnapshot.docs[i]["Nitritos"].toDouble());
+          (i).toDouble(), lastvarSnapshot.docs[i]["Nitritos"].toDouble());
       pointsNitritos.add(spot);
     }
 
@@ -170,35 +170,74 @@ class _HomeState extends State<Home> {
               ),
             ),
             SizedBox(height: 10),
-            //Image.asset('assets/images/graph.jpg'),
+            Row(
+              children: [
+                Spacer(
+                  flex: 2,
+                ),
+                Text("NH3, NO2 and NO3"),
+                Spacer(
+                  flex: 3,
+                )
+              ],
+            ),
+            SizedBox(height: 10),
             LineChart(
               LineChartData(
-                  minX: 0,
-                  maxX: 50,
-                  minY: 0,
-                  maxY: 50, //lastvarSnapshot.docs[0 - 1];
+                  maxY: 50,
+                  backgroundColor: Colors.blue[50],
+                  gridData: FlGridData(
+                    show: false,
+                  ),
+                  titlesData: FlTitlesData(
+                      bottomTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 20,
+                          getTitles: (value) {
+                            switch (value.toInt()) {
+                              case 0:
+                                return 'Enero';
+                              case 1:
+                                return 'Febrero';
+                              case 2:
+                                return 'Marzo';
+                              case 3:
+                                return 'Abril';
+                              case 4:
+                                return 'Mayo';
+                            }
+                          })),
                   lineBarsData: [
-                    LineChartBarData(spots: [
-                      pointsAmoniaco[0],
-                      pointsAmoniaco[1],
-                      pointsAmoniaco[2],
-                      pointsAmoniaco[3],
-                      pointsAmoniaco[4],
-                    ]),
-                    LineChartBarData(spots: [
-                      pointsNitratos[0],
-                      pointsNitratos[1],
-                      pointsNitratos[2],
-                      pointsNitratos[3],
-                      pointsNitratos[4],
-                    ]),
-                    LineChartBarData(spots: [
-                      pointsNitritos[0],
-                      pointsNitritos[1],
-                      pointsNitritos[2],
-                      pointsNitritos[3],
-                      pointsNitritos[4],
-                    ]),
+                    LineChartBarData(
+                        spots: [
+                          pointsAmoniaco[0],
+                          pointsAmoniaco[1],
+                          pointsAmoniaco[2],
+                          pointsAmoniaco[3],
+                          pointsAmoniaco[4],
+                        ],
+                        isCurved: true,
+                        colors: [Colors.green]),
+                    LineChartBarData(
+                        spots: [
+                          pointsNitratos[0],
+                          pointsNitratos[1],
+                          pointsNitratos[2],
+                          pointsNitratos[3],
+                          pointsNitratos[4],
+                        ],
+                        isCurved: true,
+                        colors: [Colors.blue]),
+                    LineChartBarData(
+                        spots: [
+                          pointsNitritos[0],
+                          pointsNitritos[1],
+                          pointsNitritos[2],
+                          pointsNitritos[3],
+                          pointsNitritos[4],
+                        ],
+                        isCurved: true,
+                        colors: [Colors.indigo]),
                   ]),
             )
           ],
@@ -206,15 +245,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  /*FlSpot(
-                          5,
-                          lastvarSnapshot.docs.length > 0 == true
-                              ? lastvarSnapshot
-                                  .docs[lastvarSnapshot.docs.length - 1]
-                                      ['Amoniaco']
-                                  .toDouble()
-                              : lastvarSnapshot.docs[0]['Amoniaco'].toDouble()),*/
 
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
