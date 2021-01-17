@@ -193,13 +193,81 @@ class _SignInScreenState extends State<SignInScreen> {
                             .doc('${result.email}')
                             .collection('Variables')
                             .add({
-                          'Amoniaco': 0,
+                          'Amoniaco': 10,
                           'Calcio': 0,
                           'Carbonatos': 0,
                           'Fosfatos': 0,
                           'Magnesio': 0,
                           'Nitratos': 0,
                           'Nitritos': 0,
+                          'Potasio': 0,
+                          'Salinidad': 0,
+                          'Silicatos': 0,
+                          'Fecha': DateTime.now(),
+                        });
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .collection('Variables')
+                            .add({
+                          'Amoniaco': 25,
+                          'Calcio': 0,
+                          'Carbonatos': 0,
+                          'Fosfatos': 0,
+                          'Magnesio': 0,
+                          'Nitratos': 0,
+                          'Nitritos': 10,
+                          'Potasio': 0,
+                          'Salinidad': 0,
+                          'Silicatos': 0,
+                          'Fecha': DateTime.now(),
+                        });
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .collection('Variables')
+                            .add({
+                          'Amoniaco': 20,
+                          'Calcio': 0,
+                          'Carbonatos': 0,
+                          'Fosfatos': 0,
+                          'Magnesio': 0,
+                          'Nitratos': 5,
+                          'Nitritos': 20,
+                          'Potasio': 0,
+                          'Salinidad': 0,
+                          'Silicatos': 0,
+                          'Fecha': DateTime.now(),
+                        });
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .collection('Variables')
+                            .add({
+                          'Amoniaco': 10,
+                          'Calcio': 0,
+                          'Carbonatos': 0,
+                          'Fosfatos': 0,
+                          'Magnesio': 0,
+                          'Nitratos': 10,
+                          'Nitritos': 15,
+                          'Potasio': 0,
+                          'Salinidad': 0,
+                          'Silicatos': 0,
+                          'Fecha': DateTime.now(),
+                        });
+                        FirebaseFirestore.instance
+                            .collection('Aquariums')
+                            .doc('${result.email}')
+                            .collection('Variables')
+                            .add({
+                          'Amoniaco': 0,
+                          'Calcio': 0,
+                          'Carbonatos': 0,
+                          'Fosfatos': 0,
+                          'Magnesio': 0,
+                          'Nitratos': 7,
+                          'Nitritos': 5,
                           'Potasio': 0,
                           'Salinidad': 0,
                           'Silicatos': 0,
